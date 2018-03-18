@@ -176,7 +176,7 @@ class DBHelper {
 		image.srcset = DBHelper.imageSrcsetForRestaurant(restaurant, 'jpg');
 		image.sizes = sizes;
 		image.width = 800;
-		image.alt = `An image of ${restaurant.name} located in ${restaurant.neighborhood}`;
+		image.alt = `${restaurant.name} located in ${restaurant.neighborhood}`;
 		image.className = 'restaurant-img';
 		element.append(image);
 

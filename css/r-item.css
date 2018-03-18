@@ -26,7 +26,7 @@
 /* ====================== Restaurant Details ====================== */
 
 #restaurant-name,
-#reviews-container h2 {
+#reviews-container h3 {
 	margin: 0 0 30px;
 	padding: 10px;
 	text-transform: uppercase;
@@ -96,7 +96,7 @@
 	padding: 15px 0 40px 0;
 }
 
-#reviews-container h2 {
+#reviews-container h3 {
 	background-color: #efebe9;
 	color: #00695c;
 }

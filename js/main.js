@@ -18,7 +18,7 @@ document.addEventListener('click', (e) => {
  * Set items tabindex for accessibility.
  */
 setTabindex = () => {
-	['h1', 'h2', 'p', 'span', 'img', 'td'].forEach(tag => {
+	['a', 'select', 'button'].forEach(tag => {
 		Array.prototype.slice.call(document.getElementsByTagName(tag)).forEach(element => {
 			element.tabIndex = 0;
 		});
