@@ -1,0 +1,35 @@
+{
+	"short_name": "Restaurants",
+	"name": "Restaurant Reviews",
+	"description": "Restaurant Reviews in NYC Area.",
+	"display": "standalone",
+	"start_url": "index.html",
+	"theme_color": "#3e2723",
+	"background_color": "#3e2723",
+	"icons": [{
+			"src": "rr-48.png",
+			"type": "image/png",
+			"sizes": "48x48"
+		},
+		{
+			"src": "rr-96.png",
+			"type": "image/png",
+			"sizes": "96x96"
+		},
+		{
+			"src": "rr-192.png",
+			"type": "image/png",
+			"sizes": "192x192"
+		},
+		{
+			"src": "rr-256.png",
+			"type": "image/png",
+			"sizes": "256x256"
+		},
+		{
+			"src": "rr-512.png",
+			"type": "image/png",
+			"sizes": "512x512"
+		}
+	]
+}

@@ -1,0 +1,203 @@
+@charset "utf-8";
+/* CSS Document */
+
+body {
+	position: relative;
+	min-width: 320px;
+	max-width: 1200px;
+	margin: 0 auto;
+	padding: 0;
+	background-color: #efebe9;
+	color: #3e2723;
+	font-family: 'Open Sans', sans-serif;
+	font-size: 16px;
+	line-height: 1.5;
+}
+
+ul,
+li {
+	font-size: 0.8rem;
+}
+
+a {
+	color: #00695c;
+	text-decoration: none;
+}
+
+a:hover,
+a:focus {
+	color: #fff;
+	background-color: #00695c;
+	text-decoration: none;
+}
+
+a img {
+	border: none;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+	margin: 0 0 20px;
+}
+
+article,
+aside,
+canvas,
+details,
+figcaption,
+figure,
+footer,
+header,
+hgroup,
+menu,
+nav,
+section {
+	display: block;
+}
+
+.header-main,
+.header-restaurant {
+	background-color: #4e342e;
+	color: #fff;
+}
+
+.header-main {
+	padding: 20px 0;
+}
+
+.header-restaurant {
+	padding: 20px 0 10px;
+}
+
+#maincontent {
+	min-height: 100%;
+	background-color: #d7ccc8;
+}
+
+.skip {
+	position: absolute;
+	top: -1000px;
+	left: -1000px;
+	height: 1px;
+	width: 1px;
+	text-align: left;
+	overflow: hidden;
+}
+
+a.skip:hover,
+a.skip:active,
+a.skip:focus {
+	left: 0;
+	top: 0;
+	width: auto;
+	height: auto;
+	overflow: visible;
+}
+
+body:not(.show-focus-outlines) [tabindex]:focus {
+	outline: none;
+}
+
+/* ====================== Sections ====================== */
+
+.header-main,
+.header-restaurant,
+nav,
+nav h1,
+.filter-options,
+#map-container,
+#maincontent,
+#footer,
+#breadcrumb {
+	position: relative;
+	float: left;
+	max-width: 100%;
+	width: 100%;
+}
+
+/* ====================== Navigation ====================== */
+
+nav {
+	text-align: center;
+}
+
+.header-main nav {
+	min-height: 170px;
+}
+
+.header-restaurant nav {
+	min-height: 60px;
+}
+
+nav h1 {
+	margin: 0 auto;
+}
+
+.header-main nav h1 {
+	padding: 20px 0;
+}
+
+.header-restaurant nav h1 {
+	padding: 10px 0;
+}
+
+nav h1 a {
+	font-family: 'Allura', cursive;
+	font-size: 3rem;
+	font-weight: 400;
+	letter-spacing: 5px;
+	text-decoration: none;
+	line-height: 1;
+	color: #fff;
+}
+
+nav h1:hover,
+nav h1:hover a,
+nav h1:focus,
+nav h1:focus a {
+	background-color: #efebe9;
+	color: #3e2723;
+}
+
+nav h1 a:hover,
+nav h1 a:focus {
+	background-color: #efebe9;
+	color: #3e2723;
+	text-decoration: none;
+}
+
+/* ====================== Map ====================== */
+
+#map {
+	float: left;
+	height: 300px;
+	width: 90%;
+	margin: 10px 5%;
+}
+
+/* ====================== Footer ====================== */
+
+#footer {
+	padding: 25px 0;
+	background-color: #4e342e;
+	color: #fff;
+	font-size: 0.6rem;
+	letter-spacing: 1px;
+	text-align: center;
+	text-transform: uppercase;
+}
+
+#footer a {
+	color: #4db6ac;
+}
+
+#footer a:hover,
+#footer a:focus {
+	color: #fff;
+	background-color: #00695c;
+	text-decoration: none;
+}
