@@ -60,7 +60,7 @@ servePhoto = (request) => {
 			if (response) {
 				return response;
 			}
-			
+
 			return fetch(request).then(networkResponse => {
 				cache.put(request, networkResponse.clone());
 				return networkResponse;

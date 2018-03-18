@@ -58,8 +58,7 @@ fillRestaurantHTML = (restaurant = self.restaurant) => {
 		restaurant,
 		'(max-width: 575px) 87.338vw, (max-width: 767px) 54.542vw, (max-width: 991px) 36.132vw, 36.835vw'
 	);
-	//document.getElementById('restaurant-img').replace(image);
-	
+
 	const cuisine = document.getElementById('restaurant-cuisine');
 	cuisine.innerHTML = restaurant.cuisine_type;
 
