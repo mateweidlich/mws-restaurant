@@ -8,9 +8,7 @@
 	<link rel="manifest" href="/manifest.json">
 	<link rel="stylesheet" src="//normalize-css.googlecode.com/svn/trunk/normalize.css">
 	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Allura|Open+Sans">
-	<link rel="stylesheet" href="css/main.css">
-	<link rel="stylesheet" href="css/r-list.css">
-	<link rel="stylesheet" href="css/mquery.css">
+	<link rel="stylesheet" href="css/style.min.css">
 	<title>Restaurant Reviews</title>
 </head>
 
@@ -24,17 +22,17 @@
 
 			<div class="filter-options">
 				<h2>Filter Results</h2>
-				<select id="neighborhoods-select" name="neighborhoods" onchange="updateRestaurants()" aria-label="Neighborhoods">
+				<select id="neighborhoods-select" name="neighborhoods" aria-label="Neighborhoods">
 					<option value="all" aria-selected="true">All Neighborhoods</option>
 				</select>
-				<select id="cuisines-select" name="cuisines" onchange="updateRestaurants()" aria-label="Cuisines">
+				<select id="cuisines-select" name="cuisines" aria-label="Cuisines">
 					<option value="all" aria-selected="true">All Cuisines</option>
 				</select>
 			</div>
 		</nav>
 
 		<section id="map-container">
-			<div id="map" role="application" aria-label="Google Maps with selected restaurants."></div>
+			<div id="map" role="application" aria-label="Google Maps with selected restaurants."><span>Click to activate map.</span></div>
 		</section>
 	</header>
 
@@ -44,9 +42,9 @@
 		</section>
 	</main>
 
-	<script async defer type="application/javascript" charset="utf-8" src="js/dbhelper.js"></script>
-	<script async defer type="application/javascript" charset="utf-8" src="js/main.js"></script>
-	<script async defer type="application/javascript" charset="utf-8" src="js/r-list.js"></script>
+	<script async defer type="application/javascript" charset="utf-8" src="dist/dbhelper.js"></script>
+	<script async defer type="application/javascript" charset="utf-8" src="dist/main.js"></script>
+	<script async defer type="application/javascript" charset="utf-8" src="dist/r-list.js"></script>
 	<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDvc1r9qGlZsxflGmR5eEwnVVLzPK_U-2w&libraries=places"></script>
 
 	<footer id="footer" role="contentinfo">

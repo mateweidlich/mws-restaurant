@@ -4,22 +4,22 @@ const imagesCacheName = 'restaurant-reviews-photos-v1';
 self.addEventListener('install', event => {
 	event.waitUntil(
 		caches.open(staticCacheName)
-		.then(cache => {
-			cache.addAll([
-				'index.html',
-				'restaurant.html',
-				'data/restaurants.json',
-				'js/dbhelper.js',
-				'js/main.js',
-				'js/r-list.js',
-				'js/r-item.js',
-				'css/main.css',
-				'css/r-list.css',
-				'css/r-item.css',
-				'css/mquery.css'
-			]);
-		})
-	)
+			.then(cache => {
+				cache.addAll([
+					'index.html',
+					'restaurant.html',
+					'data/restaurants.json',
+					'js/dbhelper.js',
+					'js/main.js',
+					'js/r-list.js',
+					'js/r-item.js',
+					'css/main.css',
+					'css/r-list.css',
+					'css/r-item.css',
+					'css/mquery.css'
+				]);
+			})
+	);
 });
 
 self.addEventListener('fetch', event => {
@@ -29,7 +29,7 @@ self.addEventListener('fetch', event => {
 		if (requestUrl.pathname === '/') {
 			event.respondWith(
 				caches.match('index.html')
-				.then(response => response || fetch(event.request))
+					.then(response => response || fetch(event.request))
 			);
 			return;
 		}
@@ -37,7 +37,7 @@ self.addEventListener('fetch', event => {
 		if (requestUrl.pathname.startsWith('/restaurant.html')) {
 			event.respondWith(
 				caches.match('restaurant.html')
-				.then(response => response || fetch(event.request))
+					.then(response => response || fetch(event.request))
 			);
 			return;
 		}
@@ -50,11 +50,11 @@ self.addEventListener('fetch', event => {
 
 	event.respondWith(
 		caches.match(event.request)
-		.then(response => response || fetch(event.request))
+			.then(response => response || fetch(event.request))
 	);
 });
 
-servePhoto = (request) => {
+const servePhoto = (request) => {
 	return caches.open(imagesCacheName).then(cache => {
 		return cache.match(request).then(response => {
 			if (response) {
@@ -67,4 +67,4 @@ servePhoto = (request) => {
 			});
 		});
 	});
-}
+};

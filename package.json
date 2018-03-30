@@ -1,0 +1,29 @@
+{
+  "name": "mws-restaurant",
+  "version": "1.0.0",
+  "description": "Restaurant Reviews",
+  "main": "gulpfile.js",
+  "dependencies": {},
+  "devDependencies": {
+    "gulp": "^3.9.1",
+    "gulp-autoprefixer": "^5.0.0",
+    "gulp-clean-css": "^3.9.3",
+    "gulp-concat": "^2.6.1",
+    "gulp-eslint": "^4.0.2",
+    "gulp-minify": "^2.1.0",
+    "gulp-sass": "^3.2.1"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mateweidlich/mws-restaurant.git"
+  },
+  "author": "Mate Weidlich",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/mateweidlich/mws-restaurant/issues"
+  },
+  "homepage": "https://github.com/mateweidlich/mws-restaurant#readme"
+}

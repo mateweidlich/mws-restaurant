@@ -1,20 +1,22 @@
-@charset "utf-8";
 /* ====================== Media queries ====================== */
 
 /* Small devices (landscape phones, 576px and up) */
 
 @media (min-width: 576px) and (max-width: 767px) {
-	#restaurants-list .restaurant-img {
-		float: left;
-		min-width: calc(50% - 30px);
-		max-width: calc(50% - 30px);
-		margin: 0 15px;
-	}
-	#restaurants-list .restaurant-data {
-		margin: 0;
-	}
-	#restaurants-list li a {
-		margin: 15px 0;
+	#restaurants-list {
+		&,
+		li a {
+			margin: 15px 0;
+		}
+		.restaurant-img {
+			float: left;
+			min-width: calc(50% - 30px);
+			max-width: calc(50% - 30px);
+			margin: 0 15px;
+		}
+		.restaurant-data {
+			margin: 0;
+		}
 	}
 	#restaurant-img .restaurant-img {
 		float: left;
@@ -31,12 +33,12 @@
 		margin-left: 2%;
 		width: 40%;
 		min-height: 400px;
-	}
-	.header-main nav h1 {
-		margin: 30px auto;
-	}
-	.header-main nav h1 a {
-		font-size: 4rem;
+		h1 {
+			margin: 30px auto;
+			a {
+				font-size: 4rem;
+			}
+		}
 	}
 	.filter-options {
 		position: absolute;
@@ -44,27 +46,27 @@
 		left: 0;
 		right: 20px;
 		margin: 0;
-	}
-	.filter-options h2 {
-		display: block;
-	}
-	.header-main #map-container {
-		width: 50%;
-		margin-left: 6%;
-	}
-	.header-main #map {
-		height: 400px;
-		width: 100%;
-		margin: 0;
+		h2 {
+			display: block;
+		}
 	}
 	.header-main {
 		padding: 30px 0;
+		#map-container {
+			width: 50%;
+			margin-left: 6%;
+		}
+		#map {
+			height: 400px;
+			width: 100%;
+			margin: 0;
+		}
 	}
 	#restaurants-list li {
 		width: calc(50% - 36px);
-	}
-	#restaurants-list li a {
-		margin: 15px 0 0 20px;
+		a {
+			margin: 15px 0 0 20px;
+		}
 	}
 	#restaurant-img .restaurant-img {
 		float: left;
@@ -77,18 +79,18 @@
 	}
 	#reviews-list li {
 		display: flex;
-	}
-	#reviews-list li>div {
-		display: flex;
-		flex-wrap: wrap;
-		width: 20%;
-	}
-	#reviews-list li>div>div {
-		width: 100%;
-		text-align: right;
-	}
-	#reviews-list li>p {
-		width: 70%;
+		&>div {
+			display: flex;
+			flex-wrap: wrap;
+			width: 20%;
+			&>div {
+				width: 100%;
+				text-align: right;
+			}
+		}
+		&>p {
+			width: 70%;
+		}
 	}
 }
 

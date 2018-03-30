@@ -2,20 +2,19 @@
  * Common database helper functions.
  */
 class DBHelper {
-
 	/**
 	 * Database URL.
 	 * Change this to restaurants.json file location on your server.
 	 */
 	static get DATABASE_URL() {
-		const port = 8000 // Change this to your server port
+		const port = 8000;
 		return `http://localhost:${port}/data/restaurants.json`;
 	}
 
 	/**
 	 * Fetch all restaurants.
 	 */
-	static fetchRestaurants(callback) {
+	fetchRestaurants(callback) {
 		let xhr = new XMLHttpRequest();
 		xhr.open('GET', DBHelper.DATABASE_URL);
 		xhr.onload = () => {
@@ -24,8 +23,7 @@ class DBHelper {
 				const restaurants = json.restaurants;
 				callback(null, restaurants);
 			} else { // Oops!. Got an error from server.
-				const error = (`Request failed. Returned status of ${xhr.status}`);
-				callback(error, null);
+				callback(`Request failed. Returned status of ${xhr.status}`, null);
 			}
 		};
 		xhr.send();
@@ -34,9 +32,9 @@ class DBHelper {
 	/**
 	 * Fetch a restaurant by its ID.
 	 */
-	static fetchRestaurantById(id, callback) {
+	fetchRestaurantById(id, callback) {
 		// fetch all restaurants with proper error handling.
-		DBHelper.fetchRestaurants((error, restaurants) => {
+		this.fetchRestaurants((error, restaurants) => {
 			if (error) {
 				callback(error, null);
 			} else {
@@ -53,9 +51,9 @@ class DBHelper {
 	/**
 	 * Fetch restaurants by a cuisine type with proper error handling.
 	 */
-	static fetchRestaurantByCuisine(cuisine, callback) {
+	fetchRestaurantByCuisine(cuisine, callback) {
 		// Fetch all restaurants  with proper error handling
-		DBHelper.fetchRestaurants((error, restaurants) => {
+		this.fetchRestaurants((error, restaurants) => {
 			if (error) {
 				callback(error, null);
 			} else {
@@ -69,9 +67,9 @@ class DBHelper {
 	/**
 	 * Fetch restaurants by a neighborhood with proper error handling.
 	 */
-	static fetchRestaurantByNeighborhood(neighborhood, callback) {
+	fetchRestaurantByNeighborhood(neighborhood, callback) {
 		// Fetch all restaurants
-		DBHelper.fetchRestaurants((error, restaurants) => {
+		this.fetchRestaurants((error, restaurants) => {
 			if (error) {
 				callback(error, null);
 			} else {
@@ -85,9 +83,9 @@ class DBHelper {
 	/**
 	 * Fetch restaurants by a cuisine and a neighborhood with proper error handling.
 	 */
-	static fetchRestaurantByCuisineAndNeighborhood(cuisine, neighborhood, callback) {
+	fetchRestaurantByCuisineAndNeighborhood(cuisine, neighborhood, callback) {
 		// Fetch all restaurants
-		DBHelper.fetchRestaurants((error, restaurants) => {
+		this.fetchRestaurants((error, restaurants) => {
 			if (error) {
 				callback(error, null);
 			} else {
@@ -106,9 +104,9 @@ class DBHelper {
 	/**
 	 * Fetch all neighborhoods with proper error handling.
 	 */
-	static fetchNeighborhoods(callback) {
+	fetchNeighborhoods(callback) {
 		// Fetch all restaurants
-		DBHelper.fetchRestaurants((error, restaurants) => {
+		this.fetchRestaurants((error, restaurants) => {
 			if (error) {
 				callback(error, null);
 			} else {
@@ -124,9 +122,9 @@ class DBHelper {
 	/**
 	 * Fetch all cuisines with proper error handling.
 	 */
-	static fetchCuisines(callback) {
+	fetchCuisines(callback) {
 		// Fetch all restaurants
-		DBHelper.fetchRestaurants((error, restaurants) => {
+		this.fetchRestaurants((error, restaurants) => {
 			if (error) {
 				callback(error, null);
 			} else {
@@ -142,21 +140,21 @@ class DBHelper {
 	/**
 	 * Restaurant page URL.
 	 */
-	static urlForRestaurant(restaurant) {
+	urlForRestaurant(restaurant) {
 		return (`./restaurant.html?id=${restaurant.id}`);
 	}
 
 	/**
 	 * Restaurant image URL.
 	 */
-	static imageUrlForRestaurant(restaurant) {
+	imageUrlForRestaurant(restaurant) {
 		return (`/img/${restaurant.photograph}`);
 	}
 
 	/**
 	 * Restaurant image srcset
 	 */
-	static imageSrcsetForRestaurant(restaurant, ext) {
+	imageSrcsetForRestaurant(restaurant, ext) {
 		const imgName = restaurant.photograph.replace('.jpg', '');
 		return (`/img/${imgName}_200.${ext} 200w, /img/${imgName}_300.${ext} 300w, /img/${imgName}_400.${ext} 400w, /img/${imgName}.${ext} 800w`);
 	}
@@ -164,16 +162,16 @@ class DBHelper {
 	/**
 	 * Restaurant <picture> element
 	 */
-	static pictureForRestaurant(element, restaurant, sizes) {
+	pictureForRestaurant(element, restaurant, sizes) {
 		const webpSource = document.createElement('source');
-		webpSource.srcset = DBHelper.imageSrcsetForRestaurant(restaurant, 'webp');
+		webpSource.srcset = this.imageSrcsetForRestaurant(restaurant, 'webp');
 		webpSource.sizes = sizes;
 		webpSource.type = 'image/webp';
 		element.append(webpSource);
 
 		const image = document.createElement('img');
-		image.src = DBHelper.imageUrlForRestaurant(restaurant, 'jpg');
-		image.srcset = DBHelper.imageSrcsetForRestaurant(restaurant, 'jpg');
+		image.src = this.imageUrlForRestaurant(restaurant, 'jpg');
+		image.srcset = this.imageSrcsetForRestaurant(restaurant, 'jpg');
 		image.sizes = sizes;
 		image.width = 800;
 		image.alt = `${restaurant.name} located in ${restaurant.neighborhood}`;
@@ -186,12 +184,12 @@ class DBHelper {
 	/**
 	 * Map marker for a restaurant.
 	 */
-	static mapMarkerForRestaurant(restaurant, map) {
+	mapMarkerForRestaurant(restaurant) {
 		const marker = new google.maps.Marker({
 			position: restaurant.latlng,
 			title: restaurant.name,
-			url: DBHelper.urlForRestaurant(restaurant),
-			map: map,
+			url: this.urlForRestaurant(restaurant),
+			map: window.map,
 			animation: google.maps.Animation.DROP
 		});
 		return marker;
@@ -200,7 +198,7 @@ class DBHelper {
 	/**
 	 * Rating average for a restaurant.
 	 */
-	static ratingAverageForRestaurant(restaurant) {
+	ratingAverageForRestaurant(restaurant) {
 		let count = 0,
 			sum = 0;
 
@@ -216,7 +214,10 @@ class DBHelper {
 		return (count > 0 ? (Math.round((sum / count) * 2) / 2) : 0);
 	}
 
-	static ratingHtmlForRestaurant(rating) {
+	/**
+	 * Rating html for a restaurant.
+	 */
+	ratingHtmlForRestaurant(rating) {
 		let ratingHtml = '';
 
 		for (let i = 1; i < 6; ++i) {
@@ -232,3 +233,5 @@ class DBHelper {
 		return ratingHtml;
 	}
 }
+
+window.dbhelper = new DBHelper();
