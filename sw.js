@@ -1,5 +1,6 @@
-const staticCacheName = 'restaurant-reviews-v1';
-const imagesCacheName = 'restaurant-reviews-photos-v1';
+const staticCacheName = 'restaurant-reviews-v2';
+const imagesCacheName = 'restaurant-reviews-photos-v2';
+const dataCacheName = 'restaurant-reviews-data-v2';
 
 self.addEventListener('install', event => {
 	event.waitUntil(
@@ -8,15 +9,13 @@ self.addEventListener('install', event => {
 				cache.addAll([
 					'index.html',
 					'restaurant.html',
-					'data/restaurants.json',
-					'js/dbhelper.js',
-					'js/main.js',
-					'js/r-list.js',
-					'js/r-item.js',
-					'css/main.css',
-					'css/r-list.css',
-					'css/r-item.css',
-					'css/mquery.css'
+					'dist/idb.js',
+					'dist/dbhelper.js',
+					'dist/main.js',
+					'dist/r-list.js',
+					'dist/r-item.js',
+					'css/index.min.css',
+					'css/restaurant.min.css',
 				]);
 			})
 	);
@@ -24,8 +23,10 @@ self.addEventListener('install', event => {
 
 self.addEventListener('fetch', event => {
 	const requestUrl = new URL(event.request.url);
-
-	if (requestUrl.origin === location.origin) {
+	if (requestUrl.pathname == '/restaurants') {
+		event.respondWith(serveFile(dataCacheName, event.request));
+		return;
+	} else if (requestUrl.origin === location.origin) {
 		if (requestUrl.pathname === '/') {
 			event.respondWith(
 				caches.match('index.html')
@@ -43,7 +44,7 @@ self.addEventListener('fetch', event => {
 		}
 
 		if (requestUrl.pathname.startsWith('/img/')) {
-			event.respondWith(servePhoto(event.request));
+			event.respondWith(serveFile(imagesCacheName, event.request));
 			return;
 		}
 	}
@@ -54,8 +55,8 @@ self.addEventListener('fetch', event => {
 	);
 });
 
-const servePhoto = (request) => {
-	return caches.open(imagesCacheName).then(cache => {
+const serveFile = (cacheName, request) => {
+	return caches.open(cacheName).then(cache => {
 		return cache.match(request).then(response => {
 			if (response) {
 				return response;
