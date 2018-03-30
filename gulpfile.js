@@ -15,14 +15,24 @@ gulp.task('default', ['styles', 'scripts', 'lint'], () => {
 
 gulp.task('styles', () => {
 	gulp
-		.src('sass/**/*.scss')
+		.src(['sass/**/*.scss', '!sass/**/r-item.scss'])
 		.pipe(sass().on('error', sass.logError))
 		.pipe(autoprefixer({
 			browsers: ['last 2 versions']
 		}))
 		.pipe(cleanCss())
-		.pipe(concat('style.min.css'))
+		.pipe(concat('index.min.css'))
 		.pipe(gulp.dest('./css'));
+	
+	gulp
+		.src(['sass/**/*.scss', '!sass/**/r-list.scss'])
+		.pipe(sass().on('error', sass.logError))
+		.pipe(autoprefixer({
+			browsers: ['last 2 versions']
+		}))
+		.pipe(cleanCss())
+		.pipe(concat('restaurant.min.css'))
+		.pipe(gulp.dest('./css'));	
 });
 
 gulp.task('scripts', function () {
