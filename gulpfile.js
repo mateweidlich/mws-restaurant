@@ -7,10 +7,18 @@ const minifyJs = require('gulp-minify');
 const sass = require('gulp-sass');
 const autoprefixer = require('gulp-autoprefixer');
 const eslint = require('gulp-eslint');
+const connect = require('gulp-connect');
 
-gulp.task('default', ['styles', 'scripts', 'lint'], () => {
+gulp.task('default', ['styles', 'scripts', 'lint', 'server'], () => {
 	gulp.watch('sass/**/*.scss', ['styles']);
 	gulp.watch('js/**/*.js', ['lint', 'scripts']);
+});
+
+gulp.task('server', () => {
+	connect.server({
+		port: 8000,
+		livereload: true
+	});
 });
 
 gulp.task('styles', () => {
@@ -23,7 +31,7 @@ gulp.task('styles', () => {
 		.pipe(cleanCss())
 		.pipe(concat('index.min.css'))
 		.pipe(gulp.dest('./css'));
-	
+
 	gulp
 		.src(['sass/**/*.scss', '!sass/**/r-list.scss'])
 		.pipe(sass().on('error', sass.logError))
@@ -32,7 +40,7 @@ gulp.task('styles', () => {
 		}))
 		.pipe(cleanCss())
 		.pipe(concat('restaurant.min.css'))
-		.pipe(gulp.dest('./css'));	
+		.pipe(gulp.dest('./css'));
 });
 
 gulp.task('scripts', function () {

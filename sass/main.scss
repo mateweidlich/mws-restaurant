@@ -168,16 +168,19 @@ nav {
 	margin: 10px 5%;
 	justify-content: center;
 	align-items: center;
+	background: url(../img/map.jpg) no-repeat;
+	background-size: cover;
 
 	span {
 		padding: 30px;
+		background-color: #3e2723;
+		color: #efebe9;
 		cursor: pointer;
 
 		&:hover,
 		&:focus {
 			background-color: #efebe9;
 			color: #3e2723;
-			text-decoration: none;
 		}
 	}
 }
