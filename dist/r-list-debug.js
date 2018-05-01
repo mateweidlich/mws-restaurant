@@ -115,6 +115,7 @@ class RestaurantList {
 					restaurantList.addMarkersToMap();
 				}
 			}
+			window.loaded = true;
 		});
 	}
 
@@ -157,8 +158,10 @@ class RestaurantList {
 	 */
 	createRestaurantHTML(restaurant) {
 		const li = document.createElement('li');
+		li.id = 'rr_' + restaurant.id;
 
 		const fav = document.createElement('div');
+		fav.id = 'fav_' + restaurant.id;
 		fav.className = 'restaurant-fav';
 		const favSpan = document.createElement('span');
 		favSpan.setAttribute('aria-label', 'Mark as favorite');
@@ -182,12 +185,14 @@ class RestaurantList {
 		fav.append(favSpan);
 		li.append(fav);
 
-		const image = window.dbhelper.pictureForRestaurant(
-			document.createElement('picture'),
-			restaurant,
-			'(max-width: 575px) 71.8vw, (max-width: 767px) 40.071vw, (max-width: 991px) 36.944vw, 23.316vw'
-		);
-		li.append(image);
+		window.loadAfterReady.push(() => {
+			const image = window.dbhelper.pictureForRestaurant(
+				document.createElement('picture'),
+				restaurant,
+				'(max-width: 575px) 71.8vw, (max-width: 767px) 40.071vw, (max-width: 991px) 36.944vw, 23.316vw'
+			);
+			document.getElementById('rr_' + restaurant.id).insertBefore(image, document.getElementById('fav_' + restaurant.id));
+		});
 
 		const div = document.createElement('div');
 		div.className = 'restaurant-data';

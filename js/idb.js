@@ -29,11 +29,13 @@ class Idb {
 				reject();
 			};
 			this.idb.onupgradeneeded = (event) => {
-				const store = event.target.result.createObjectStore(
-					this.dbName, {
-						keyPath: 'id'
-					}
-				);
+				const options = {
+					keyPath: 'id'
+				};
+				if (this.dbName === 'rr-offline') {
+					options.autoIncrement = true;
+				}
+				const store = event.target.result.createObjectStore(this.dbName, options);
 
 				if (this.dbName === 'rr-restaurants') {
 					store.createIndex('neighborhood', 'neighborhood');
@@ -102,9 +104,13 @@ class Idb {
 					'content-type': 'application/json'
 				}
 			}).then(response => response.json()).then((json) => {
+				this.getDbRW().put(json);
 				resolve(json);
 			}).catch(() => {
-				// TODO: try to save later
+				review.type = 'review';
+				window.offlineIdb.getDbRW().put(review);
+				review.id = Date.now();
+				this.getDbRW().put(review);
 				reject(review);
 			});
 		});
@@ -117,23 +123,27 @@ class Idb {
 		return new Promise((resolve, reject) => {
 			this.getById(id).then((restaurant) => {
 				restaurant.is_favorite = isFav;
+				this.getDbRW().put(restaurant);
 
-				const request = this.getDbRW().put(restaurant);
-				request.onsuccess = () => {
-					fetch(`${this.jsonUrl}restaurants/${restaurant.id}/?is_favorite=${isFav.toString()}`, {
-						method: 'PUT'
-					}).then(() => {
-						resolve();
-					}).catch(() => {
-						// TODO: try to save later
-						resolve();
+				fetch(`${this.jsonUrl}restaurants/${id}/?is_favorite=${isFav.toString()}`, {
+					method: 'PUT'
+				}).then(() => {
+					resolve();
+				}).catch(() => {
+					const request = window.offlineIdb.getDbRW().put({
+						type: 'favorite',
+						restaurant_id: id,
+						is_favorite: isFav
 					});
-				};
-				request.onerror = () => {
-					reject('Error setFavoriteById');
-				};
-			}).catch((error) => {
-				reject(error);
+					request.onsuccess = () => {
+						resolve();
+					};
+					request.onerror = () => {
+						reject();
+					};
+				});
+			}).catch(() => {
+				reject();
 			});
 		});
 	}
@@ -203,3 +213,28 @@ class Idb {
 
 window.idb = new Idb('rr-restaurants', 1);
 window.reviewIdb = new Idb('rr-reviews', 1);
+window.offlineIdb = new Idb('rr-offline', 1);
+
+window.offlineUpdate = window.setInterval(() => {
+	window.offlineIdb.getAll().then((items) => {
+		items.forEach(item => {
+			if (item.type === 'review') {
+				fetch(`${window.offlineIdb.jsonUrl}reviews/`, {
+					method: 'POST',
+					body: JSON.stringify(item),
+					headers: {
+						'content-type': 'application/json'
+					}
+				}).then(() => {
+					window.offlineIdb.getDbRW().delete(item.id);
+				}).catch(() => {});
+			} else if (item.type === 'favorite') {
+				fetch(`${window.offlineIdb.jsonUrl}restaurants/${item.restaurant_id}/?is_favorite=${item.is_favorite.toString()}`, {
+					method: 'PUT'
+				}).then(() => {
+					window.offlineIdb.getDbRW().delete(item.id);
+				}).catch(() => {});
+			}
+		});
+	});
+}, 10000);

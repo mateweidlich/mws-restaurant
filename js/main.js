@@ -51,3 +51,35 @@ window.getParameterByName = (name, url) => {
 if (navigator.serviceWorker) {
 	navigator.serviceWorker.register('sw.js').then(() => window.console.log('Service worker operational!'));
 }
+
+window.requestAnimationFrame = window.requestAnimationFrame ||
+	window.mozRequestAnimationFrame ||
+	window.webkitRequestAnimationFrame ||
+	window.msRequestAnimationFrame ||
+	function (f) {
+		return setTimeout(f, 1000 / 60);
+	};
+window.cancelAnimationFrame = window.cancelAnimationFrame ||
+	window.mozCancelAnimationFrame ||
+	function (requestID) {
+		clearTimeout(requestID);
+	};
+
+window.loadAfterReady = [];
+window.loaded = false;
+
+window.loadAfterReadyTimer = () => {
+	if (window.loaded && window.loadAfterReady.length > 0) {
+		window.loadAfterReady.forEach((func) => {
+			if (typeof func === 'function') {
+				func();
+			}
+		});
+		window.loadAfterReady = [];
+		window.cancelAnimationFrame(window.loadAfterReadyTimer);
+	} else {
+		window.requestAnimationFrame(window.loadAfterReadyTimer);
+	}
+};
+
+window.requestAnimationFrame(window.loadAfterReadyTimer);

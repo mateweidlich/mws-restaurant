@@ -8,6 +8,7 @@ window.addEventListener('load', () => {
 			restaurant.fillBreadcrumb();
 			window.setTabindex();
 		}
+		window.loaded = true;
 	});
 });
 
@@ -109,8 +110,8 @@ class Restaurant {
 				document.getElementById('review-form').reset();
 				ul.appendChild(this.createReviewHTML(json));
 			}).catch((json) => {
-				document.getElementById('review-form').reset();
 				json.updatedAt = Date.now();
+				document.getElementById('review-form').reset();
 				ul.appendChild(this.createReviewHTML(json));
 			});
 		});
