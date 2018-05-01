@@ -28,7 +28,9 @@
 		</nav>
 		<!-- Beginning map -->
 		<section id="map-container">
-			<div id="map" role="application" aria-label="Google Maps with selected restaurants."><span>Click to activate map.</span></div>
+			<div id="map" role="application" aria-label="Google Maps with selected restaurants.">
+				<span>Click to activate map.</span>
+			</div>
 		</section>
 		<!-- End map -->
 		<!-- Beginning breadcrumb -->
@@ -46,19 +48,52 @@
 	<main id="maincontent" role="main">
 		<!-- Beginning restaurant -->
 		<section id="restaurant-container">
+			<div id="restaurant-fav">
+				<span>Mark as</span>
+				<span id="restaurant-fav-span">☆</span>
+				<span>favorite</span>
+			</div>
 			<h2 id="restaurant-name"></h2>
 			<picture id="restaurant-img"></picture>
 			<div>
 				<p id="restaurant-cuisine" aria-label="Cuisine"></p>
 				<p id="restaurant-address" aria-label="Address"></p>
-				<p id="restaurant-rating" aria-label="Rating"></p>
 			</div>
 			<table id="restaurant-hours" aria-label="Opening hours"></table>
 		</section>
 		<!-- end restaurant -->
 		<!-- Beginning reviews -->
 		<section id="reviews-container">
+			<h3>Reviews</h3>
 			<ul id="reviews-list"></ul>
+			<h3 id="review-form-header">Write your review!</h3>
+			<div id="review-form-container">
+				<form id="review-form">
+					<ul>
+						<li>
+							<input id="review-name" type="text" />
+							<label for="review-name">Name</label>
+						</li>
+						<li>
+							<select id="review-rating">
+								<option value="5">★★★★★</option>
+								<option value="4">★★★★</option>
+								<option value="3">★★★</option>
+								<option value="2">★★</option>
+								<option value="1">★</option>
+							</select>
+							<label for="review-rating">Rating</label>
+						</li>
+						<li>
+							<textarea id="review-text"></textarea>
+							<label for="review-text">Review</label>
+						</li>
+						<li>
+							<button id="review-form-send" type="button">Send review!</button>
+						</li>
+					</ul>
+				</form>
+			</div>
 		</section>
 		<!-- End reviews -->
 	</main>

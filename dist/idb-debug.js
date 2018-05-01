@@ -1,15 +1,16 @@
 window.indexedDB = window.indexedDB || window.mozIndexedDB || window.webkitIndexedDB || window.msIndexedDB;
 
 class Idb {
-	constructor() {
-		this.jsonUrl = 'http://localhost:1337/restaurants';
-		this.dbName = 'restaurant-reviews';
-		this.dbVersion = 1;
+	constructor(dbName, version) {
+		this.jsonUrl = 'http://localhost:1337/';
+		this.dbName = dbName;
+		this.dbVersion = version;
 		this.idb = null;
 		this.db = null;
-
 		this.openDb().then(() => {
-			this.fillDb();
+			if (this.dbName === 'rr-restaurants') {
+				this.fillDb();
+			}
 		});
 	}
 
@@ -33,9 +34,14 @@ class Idb {
 						keyPath: 'id'
 					}
 				);
-				store.createIndex('neighborhood', 'neighborhood');
-				store.createIndex('cuisine_type', 'cuisine_type');
-				store.createIndex('neighborhood_cuisine_type', ['neighborhood', 'cuisine_type']);
+
+				if (this.dbName === 'rr-restaurants') {
+					store.createIndex('neighborhood', 'neighborhood');
+					store.createIndex('cuisine_type', 'cuisine_type');
+					store.createIndex('neighborhood_cuisine_type', ['neighborhood', 'cuisine_type']);
+				} else if (this.dbName === 'rr-reviews') {
+					store.createIndex('restaurant_id', 'restaurant_id');
+				}
 			};
 		});
 	}
@@ -85,6 +91,54 @@ class Idb {
 	}
 
 	/**
+	 * Send review
+	 */
+	sendReview(review) {
+		return new Promise((resolve, reject) => {
+			fetch(`${this.jsonUrl}reviews/`, {
+				method: 'POST',
+				body: JSON.stringify(review),
+				headers: {
+					'content-type': 'application/json'
+				}
+			}).then(response => response.json()).then((json) => {
+				resolve(json);
+			}).catch(() => {
+				// TODO: try to save later
+				reject(review);
+			});
+		});
+	}
+
+	/**
+	 * Set favorite restaurant by its ID.
+	 */
+	setFavoriteById(id, isFav = true) {
+		return new Promise((resolve, reject) => {
+			this.getById(id).then((restaurant) => {
+				restaurant.is_favorite = isFav;
+
+				const request = this.getDbRW().put(restaurant);
+				request.onsuccess = () => {
+					fetch(`${this.jsonUrl}restaurants/${restaurant.id}/?is_favorite=${isFav.toString()}`, {
+						method: 'PUT'
+					}).then(() => {
+						resolve();
+					}).catch(() => {
+						// TODO: try to save later
+						resolve();
+					});
+				};
+				request.onerror = () => {
+					reject('Error setFavoriteById');
+				};
+			}).catch((error) => {
+				reject(error);
+			});
+		});
+	}
+
+	/**
 	 * Get objects from store by Index
 	 */
 	getByIndex(index, value) {
@@ -100,10 +154,41 @@ class Idb {
 	}
 
 	/**
+	 * Get objects from store by Index
+	 */
+	getReviewByIndex(index, value) {
+		return new Promise((resolve, reject) => {
+			fetch(`${this.jsonUrl}reviews/?restaurant_id=${value}`)
+				.then((response) => response.json())
+				.then((json) => {
+					if (json.length > 0) {
+						const dbRw = this.getDbRW();
+						json.forEach(element => {
+							dbRw.put(element);
+						});
+						resolve(json);
+					} else {
+						reject('Error getReviewByIndex');
+					}
+				}).catch(() => {
+					const request = this.getDbR().index(index).getAll(value);
+					request.onsuccess = () => {
+						if (request.result.length > 0) {
+							resolve(request.result);
+						}
+					};
+					request.onerror = () => {
+						reject();
+					};
+				});
+		});
+	}
+
+	/**
 	 * Fill database from json
 	 */
 	fillDb() {
-		fetch(this.jsonUrl)
+		fetch(`${this.jsonUrl}restaurants`)
 			.then((response) => response.json())
 			.then((json) => {
 				if (json.length > 0) {
@@ -116,4 +201,5 @@ class Idb {
 	}
 }
 
-window.idb = new Idb();
+window.idb = new Idb('rr-restaurants', 1);
+window.reviewIdb = new Idb('rr-reviews', 1);

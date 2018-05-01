@@ -30,6 +30,7 @@
 	padding: 15px 15px 60px;
 	list-style: outside none none;
 	li {
+		position: relative;
 		width: 100%;
 		margin: 15px;
 		padding: 15px 0;
@@ -66,6 +67,21 @@
 	p {
 		margin: 0;
 		font-size: 0.9rem;
+	}
+	.restaurant-fav {
+		position: absolute;
+		bottom: 8px;
+    	right: 16px;
+		background-color: #efebe9;
+		text-align: center;
+		span {
+			display: block;
+			margin-bottom: 3px;
+			font-size: 40px;
+			line-height: 45px;
+			color: #00695c;
+			cursor: pointer;
+		}
 	}
 	.restaurant-img {
 		display: block;

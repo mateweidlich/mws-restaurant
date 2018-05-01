@@ -147,25 +147,6 @@ class DBHelper {
 	}
 
 	/**
-	 * Rating average for a restaurant.
-	 */
-	ratingAverageForRestaurant(restaurant) {
-		let count = 0,
-			sum = 0;
-
-		if (restaurant.reviews) {
-			restaurant.reviews.forEach(review => {
-				if (review.rating) {
-					++count;
-					sum += review.rating;
-				}
-			});
-		}
-
-		return (count > 0 ? (Math.round((sum / count) * 2) / 2) : 0);
-	}
-
-	/**
 	 * Rating html for a restaurant.
 	 */
 	ratingHtmlForRestaurant(rating) {
@@ -173,11 +154,9 @@ class DBHelper {
 
 		for (let i = 1; i < 6; ++i) {
 			if (rating >= i) {
-				ratingHtml += '🌑';
-			} else if (rating + 0.5 == i) {
-				ratingHtml += '🌓';
+				ratingHtml += '★';
 			} else {
-				ratingHtml += '🌕';
+				ratingHtml += '☆';
 			}
 		}
 

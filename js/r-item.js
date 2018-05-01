@@ -60,6 +60,25 @@ class Restaurant {
 		const name = document.getElementById('restaurant-name');
 		name.innerHTML = this.item.name;
 
+		const favSpan = document.getElementById('restaurant-fav-span');
+		const isFav = (this.item.is_favorite === 'true' || this.item.is_favorite === true);
+		if (isFav) {
+			favSpan.className = 'is_fav';
+		}
+		favSpan.innerHTML = (isFav) ? '★' : '☆';
+		favSpan.addEventListener('click', (event) => {
+			const isFav = event.target.classList.contains('is_fav');
+			window.idb.setFavoriteById(this.item.id, !isFav).then(() => {
+				if (isFav) {
+					event.target.classList.remove('is_fav');
+					event.target.innerHTML = '☆';
+				} else {
+					event.target.classList.add('is_fav');
+					event.target.innerHTML = '★';
+				}
+			});
+		});
+
 		window.dbhelper.pictureForRestaurant(
 			document.getElementById('restaurant-img'),
 			this.item,
@@ -72,15 +91,29 @@ class Restaurant {
 		const address = document.getElementById('restaurant-address');
 		address.innerHTML = this.item.address;
 
-		const rating = document.getElementById('restaurant-rating');
-		rating.innerHTML = window.dbhelper.ratingHtmlForRestaurant(window.dbhelper.ratingAverageForRestaurant(this.item));
-
 		// fill operating hours
 		if (this.item.operating_hours) {
 			this.fillRestaurantHoursHTML();
 		}
 		// fill reviews
 		this.fillReviewsHTML();
+
+		document.getElementById('review-form-send').addEventListener('click', () => {
+			const ul = document.getElementById('reviews-list');
+			window.reviewIdb.sendReview({
+				restaurant_id: this.item.id,
+				name: document.getElementById('review-name').value,
+				rating: document.getElementById('review-rating').value,
+				comments: document.getElementById('review-text').value
+			}).then((json) => {
+				document.getElementById('review-form').reset();
+				ul.appendChild(this.createReviewHTML(json));
+			}).catch((json) => {
+				document.getElementById('review-form').reset();
+				json.updatedAt = Date.now();
+				ul.appendChild(this.createReviewHTML(json));
+			});
+		});
 	}
 
 	/**
@@ -109,23 +142,17 @@ class Restaurant {
 	 */
 	fillReviewsHTML() {
 		const container = document.getElementById('reviews-container');
-		const title = document.createElement('h3');
-		title.innerHTML = 'Reviews';
-		container.appendChild(title);
 
-		if (!this.item.reviews) {
+		window.reviewIdb.getReviewByIndex('restaurant_id', this.item.id).then((reviews) => {
+			const ul = document.getElementById('reviews-list');
+			reviews.forEach(review => {
+				ul.appendChild(this.createReviewHTML(review));
+			});
+		}).catch(() => {
 			const noReviews = document.createElement('p');
 			noReviews.innerHTML = 'No reviews yet!';
 			container.appendChild(noReviews);
-			return;
-		}
-
-		const ul = document.getElementById('reviews-list');
-		this.item.reviews.forEach(review => {
-			ul.appendChild(this.createReviewHTML(review));
 		});
-
-		container.appendChild(ul);
 	}
 
 	/**
@@ -143,13 +170,17 @@ class Restaurant {
 		const innerDiv = document.createElement('div');
 		const date = document.createElement('p');
 		date.className = 'reviewer-date';
-		date.innerHTML = review.date;
+		const t = new Date(review.updatedAt);
+		const leadingZero = (num) => {
+			return ('0' + num).slice(-2);
+		};
+		date.innerHTML = `${t.getFullYear()}.${leadingZero(t.getMonth() + 1)}.${leadingZero(t.getDate())}. ${leadingZero(t.getHours())}:${leadingZero(t.getMinutes())}`;
 		innerDiv.appendChild(date);
 
 		const rating = document.createElement('p');
 		rating.className = 'reviewer-rating';
 		rating.setAttribute('aria-label', 'Rating: ' + review.rating + ' of 5');
-		rating.innerHTML = window.dbhelper.ratingHtmlForRestaurant(review.rating);
+		rating.innerHTML = window.dbhelper.ratingHtmlForRestaurant(review.rating, true);
 
 		innerDiv.appendChild(rating);
 

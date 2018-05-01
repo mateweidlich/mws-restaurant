@@ -158,6 +158,30 @@ class RestaurantList {
 	createRestaurantHTML(restaurant) {
 		const li = document.createElement('li');
 
+		const fav = document.createElement('div');
+		fav.className = 'restaurant-fav';
+		const favSpan = document.createElement('span');
+		favSpan.setAttribute('aria-label', 'Mark as favorite');
+		const isFav = (restaurant.is_favorite === 'true' || restaurant.is_favorite === true);
+		if (isFav) {
+			favSpan.className = 'is_fav';
+		}
+		favSpan.innerHTML = (isFav) ? '★' : '☆';
+		favSpan.addEventListener('click', (event) => {
+			const isFav = event.target.classList.contains('is_fav');
+			window.idb.setFavoriteById(restaurant.id, !isFav).then(() => {
+				if (isFav) {
+					event.target.classList.remove('is_fav');
+					event.target.innerHTML = '☆';
+				} else {
+					event.target.classList.add('is_fav');
+					event.target.innerHTML = '★';
+				}
+			});
+		});
+		fav.append(favSpan);
+		li.append(fav);
+
 		const image = window.dbhelper.pictureForRestaurant(
 			document.createElement('picture'),
 			restaurant,
@@ -186,14 +210,6 @@ class RestaurantList {
 		more.innerHTML = 'View Details';
 		more.href = window.dbhelper.urlForRestaurant(restaurant);
 		li.append(more);
-
-		const average = window.dbhelper.ratingAverageForRestaurant(restaurant);
-		const rating = document.createElement('span');
-		rating.className = 'restaurant-rating';
-		rating.setAttribute('aria-label', 'Rating: ' + average + ' of 5');
-		rating.innerHTML = window.dbhelper.ratingHtmlForRestaurant(average);
-
-		li.append(rating);
 
 		return li;
 	}

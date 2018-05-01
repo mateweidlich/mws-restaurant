@@ -25,7 +25,7 @@ window.addEventListener('load', () => {
  * Set items tabindex for accessibility.
  */
 window.setTabindex = () => {
-	['a', 'select', 'button'].forEach(tag => {
+	['a', 'select', 'input', 'textarea', 'button'].forEach(tag => {
 		Array.prototype.slice.call(document.getElementsByTagName(tag)).forEach(element => {
 			element.tabIndex = 0;
 		});

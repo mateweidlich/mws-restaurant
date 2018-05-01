@@ -2,7 +2,7 @@
 ---
 #### _Three Stage Course Material Project - Restaurant Reviews_
 
-Use the dev server: `https://github.com/udacity/mws-restaurant-stage-2`
+Use the dev server: `https://github.com/udacity/mws-restaurant-stage-3`
 When it is up and running, then:
 
 `npm install`
