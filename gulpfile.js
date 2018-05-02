@@ -9,12 +9,18 @@ const autoprefixer = require('gulp-autoprefixer');
 const eslint = require('gulp-eslint');
 const connect = require('gulp-connect');
 
-gulp.task('default', ['styles', 'scripts', 'lint', 'server'], () => {
+gulp.task('default', ['styles', 'scripts', 'lint', 'devserver'], () => {
 	gulp.watch('sass/**/*.scss', ['styles']);
 	gulp.watch('js/**/*.js', ['lint', 'scripts']);
 });
 
 gulp.task('server', () => {
+	connect.server({
+		port: 8000
+	});
+});
+
+gulp.task('devserver', () => {
 	connect.server({
 		port: 8000,
 		livereload: true
